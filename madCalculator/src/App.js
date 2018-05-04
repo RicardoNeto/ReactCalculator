@@ -7,7 +7,7 @@ class Cell extends Component{
   render(){
     return(
       // <div className="column">{this.props.valor}</div>
-      <input className="calcBox" value = {this.props.valor} onChange={this.props.onChange}/>
+      <input className="calcBox" value = {this.props.valor} disabled/>
     );
   }
 }
@@ -47,7 +47,7 @@ class ButtonPallet extends Component {
   componentDidMount() {
     this.timerID = setInterval(
       () => this.tick(),
-      2000
+      this.props.timing
     );
   }
 
@@ -88,7 +88,7 @@ class ButtonPallet extends Component {
     );
     
   }
-  
+
 }
 
 class Calculadora extends Component {
@@ -101,6 +101,8 @@ class Calculadora extends Component {
       valor2: 0,
       operation: '',
       firstAfterOperation: false,
+      shuffleTiming:500,
+      //ADICIONAR SLIDER
     }
     this.handleClickNumber = this.handleClickNumber.bind(this);
     this.handleClickOperation = this.handleClickOperation.bind(this);
@@ -174,14 +176,12 @@ class Calculadora extends Component {
     }
   }
 
-  
-
   render(){
     return (
       <div>
         <div className="row">
           {/* <a>{this.state.operation}</a> */}
-          <Cell key={0} valor={this.state.valorBox} onChange={evt => this.updateInputValue1(evt)}/>
+          <Cell key={0} valor={this.state.valorBox} />
           {/* <Cell key={1} valor={this.state.valor2} onChange={evt => this.updateInputValue2(evt)}/> */}
         </div>
         <ButtonPallet 
@@ -189,6 +189,7 @@ class Calculadora extends Component {
           handleClickOperation={this.handleClickOperation} 
           handleClickResultado={this.handleClickResultado}
           handleClickReset = {this.handleClickReset}
+          timing = {this.state.shuffleTiming}
         />
       </div>
     );
