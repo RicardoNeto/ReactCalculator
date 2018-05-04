@@ -22,18 +22,90 @@ class Botao extends Component{
   }
 }
 
+class ButtonPallet extends Component {
+  constructor(props){
+    super(props);
+    this.state={
+      buttonValues: [0,1,2,3,4,5,6,7,8,9],
+    }
+  }
+
+  shuffle(a) {
+    for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  tick() {
+    this.setState({
+      buttonValues: this.shuffle(this.state.buttonValues),
+    });
+  }
+
+  componentDidMount() {
+    this.timerID = setInterval(
+      () => this.tick(),
+      2000
+    );
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timerID);
+  }
+
+  render(){
+    return(
+      <div>
+        <div className="row">
+          <Botao className="calcButtonUltraWide" desc="A/C" onClick={() => this.props.handleClickReset()}/>
+          <Botao className="calcButtonOp" desc="/" onClick={(e) => this.props.handleClickOperation('/',e)}/>
+        </div>
+        <div className="row">
+          <Botao className="calcButton" desc={this.state.buttonValues[0]} onClick={(e) => this.props.handleClickNumber(this.state.buttonValues[0],e)}/>
+          <Botao className="calcButton" desc={this.state.buttonValues[1]} onClick={(e) => this.props.handleClickNumber(this.state.buttonValues[1],e)}/>
+          <Botao className="calcButton" desc={this.state.buttonValues[2]} onClick={(e) => this.props.handleClickNumber(this.state.buttonValues[2],e)}/>
+          <Botao className="calcButtonOp" desc="*" onClick={(e) => this.props.handleClickOperation('*',e)}/>
+        </div>
+        <div className="row">
+          <Botao className="calcButton" desc={this.state.buttonValues[3]} onClick={(e) => this.props.handleClickNumber(this.state.buttonValues[3],e)}/>
+          <Botao className="calcButton" desc={this.state.buttonValues[4]} onClick={(e) => this.props.handleClickNumber(this.state.buttonValues[4],e)}/>
+          <Botao className="calcButton" desc={this.state.buttonValues[5]} onClick={(e) => this.props.handleClickNumber(this.state.buttonValues[5],e)}/>
+          <Botao className="calcButtonOp" desc="-" onClick={(e) => this.props.handleClickOperation('-',e)}/>
+        </div>
+        <div className="row">
+          <Botao className="calcButton" desc={this.state.buttonValues[6]} onClick={(e) => this.props.handleClickNumber(this.state.buttonValues[6],e)}/>
+          <Botao className="calcButton" desc={this.state.buttonValues[7]} onClick={(e) => this.props.handleClickNumber(this.state.buttonValues[7],e)}/>
+          <Botao className="calcButton" desc={this.state.buttonValues[8]} onClick={(e) => this.props.handleClickNumber(this.state.buttonValues[8],e)}/>
+          <Botao className="calcButtonOp" desc="+" onClick={(e) => this.props.handleClickOperation('+',e)}/>
+        </div>
+        <div className="row">
+          <Botao className="calcButtonUltraWide" desc={this.state.buttonValues[9]} onClick={(e) => this.props.handleClickNumber(this.state.buttonValues[9],e)}/>
+          <Botao className="calcButton" desc="=" onClick={() => this.props.handleClickResultado()}/>
+        </div>
+      </div>
+    );
+    
+  }
+  
+}
+
 class Calculadora extends Component {
 
   constructor(props){
     super(props);
     this.state={
-      buttonValues: [0,1,2,3,4,5,6,7,8,9],
       valorBox: 0,
       valor1: 0,
       valor2: 0,
       operation: '',
       firstAfterOperation: false,
     }
+    this.handleClickNumber = this.handleClickNumber.bind(this);
+    this.handleClickOperation = this.handleClickOperation.bind(this);
+    this.handleClickReset = this.handleClickReset.bind(this);
+    this.handleClickResultado = this.handleClickResultado.bind(this);
   }
 
   handleClickOperation(op,e){
@@ -102,30 +174,7 @@ class Calculadora extends Component {
     }
   }
 
-  shuffle(a) {
-    for (let i = a.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [a[i], a[j]] = [a[j], a[i]];
-    }
-    return a;
-  }
-
-  tick() {
-    this.setState({
-      buttonValues: this.shuffle(this.state.buttonValues),
-    });
-  }
-
-  componentDidMount() {
-    this.timerID = setInterval(
-      () => this.tick(),
-      2000
-    );
-  }
-
-  componentWillUnmount() {
-    clearInterval(this.timerID);
-  }
+  
 
   render(){
     return (
@@ -135,35 +184,12 @@ class Calculadora extends Component {
           <Cell key={0} valor={this.state.valorBox} onChange={evt => this.updateInputValue1(evt)}/>
           {/* <Cell key={1} valor={this.state.valor2} onChange={evt => this.updateInputValue2(evt)}/> */}
         </div>
-        <div className="row">
-          <Botao className="calcButtonUltraWide" desc="A/C" onClick={() => this.handleClickReset()}/>
-          <Botao className="calcButtonOp" desc="/" onClick={(e) => this.handleClickOperation('/',e)}/>
-        </div>
-        <div className="row">
-          <Botao className="calcButton" desc={this.state.buttonValues[0]} onClick={(e) => this.handleClickNumber(this.state.buttonValues[0],e)}/>
-          <Botao className="calcButton" desc={this.state.buttonValues[1]} onClick={(e) => this.handleClickNumber(this.state.buttonValues[1],e)}/>
-          <Botao className="calcButton" desc={this.state.buttonValues[2]} onClick={(e) => this.handleClickNumber(this.state.buttonValues[2],e)}/>
-          <Botao className="calcButtonOp" desc="*" onClick={(e) => this.handleClickOperation('*',e)}/>
-        </div>
-        <div className="row">
-          <Botao className="calcButton" desc={this.state.buttonValues[3]} onClick={(e) => this.handleClickNumber(this.state.buttonValues[3],e)}/>
-          <Botao className="calcButton" desc={this.state.buttonValues[4]} onClick={(e) => this.handleClickNumber(this.state.buttonValues[4],e)}/>
-          <Botao className="calcButton" desc={this.state.buttonValues[5]} onClick={(e) => this.handleClickNumber(this.state.buttonValues[5],e)}/>
-          <Botao className="calcButtonOp" desc="-" onClick={(e) => this.handleClickOperation('-',e)}/>
-        </div>
-        <div className="row">
-          <Botao className="calcButton" desc={this.state.buttonValues[6]} onClick={(e) => this.handleClickNumber(this.state.buttonValues[6],e)}/>
-          <Botao className="calcButton" desc={this.state.buttonValues[7]} onClick={(e) => this.handleClickNumber(this.state.buttonValues[7],e)}/>
-          <Botao className="calcButton" desc={this.state.buttonValues[8]} onClick={(e) => this.handleClickNumber(this.state.buttonValues[8],e)}/>
-          <Botao className="calcButtonOp" desc="+" onClick={(e) => this.handleClickOperation('+',e)}/>
-        </div>
-        <div className="row">
-          <Botao className="calcButtonUltraWide" desc={this.state.buttonValues[9]} onClick={(e) => this.handleClickNumber(this.state.buttonValues[9],e)}/>
-          <Botao className="calcButton" desc="=" onClick={() => this.handleClickResultado()}/>
-        </div>
-        <div className="row">
-          <a className="calcResult">{this.state.result}</a>
-        </div>
+        <ButtonPallet 
+          handleClickNumber={this.handleClickNumber} 
+          handleClickOperation={this.handleClickOperation} 
+          handleClickResultado={this.handleClickResultado}
+          handleClickReset = {this.handleClickReset}
+        />
       </div>
     );
   }
